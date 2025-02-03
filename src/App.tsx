@@ -7,6 +7,7 @@ function App() {
   const [focusedColumn, setFocusedColumn] = useState(0);
   const [columnTitle, setColumnTitle] = useState("");
   const [columns, setColumns] = useState([{ id: 1, name: " Column 1" }]);
+  const [previewStatus, setPreviewStatus] = useState("false");
 
   const handleChange = (event: any) => {
     setTableTitle(event?.target.value);
@@ -28,23 +29,46 @@ function App() {
     );
   };
 
+  const handleChangePreview = () => {
+    if (previewStatus == "false") {
+      setPreviewStatus("true");
+    } else {
+      setPreviewStatus("false");
+    }
+    console.log(previewStatus);
+  };
+
   return (
-    <div className="flex justify-between h-full">
+    <div className="lg:flex-row flex flex-col-reverse justify-between h-full">
       <Table
         columns={columns}
         setColumns={setColumns}
         tableTitle={tableTitle}
         onClickColumn={alertTable}
         valueColumnTitle={columnTitle}
+        previewStatus={previewStatus}
+        onChangePreview={handleChangePreview}
       />
 
-      <SideBar
-        valueTableTitle={tableTitle}
-        onChangeTableTitle={handleChange}
-        focusedColumn={focusedColumn}
-        valueColumnTitle={columnTitle}
-        onChangeColumnTitle={handleChangeColumnTitle}
-      />
+      {previewStatus == "true" ? (
+        <SideBar
+          valueTableTitle={tableTitle}
+          onChangeTableTitle={handleChange}
+          focusedColumn={focusedColumn}
+          valueColumnTitle={columnTitle}
+          onChangeColumnTitle={handleChangeColumnTitle}
+          previewMode={false}
+        />
+      ) : (
+        <SideBar
+          valueTableTitle={tableTitle}
+          onChangeTableTitle={handleChange}
+          focusedColumn={focusedColumn}
+          valueColumnTitle={columnTitle}
+          onChangeColumnTitle={handleChangeColumnTitle}
+          previewMode={true}
+        />
+      )}
     </div>
   );
 }
